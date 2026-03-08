@@ -7,18 +7,19 @@ import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <Hero />
-      <About />
-      <Services />
-      <Portfolio />
-      <Testimonials />
-      <Contact />
-      <Footer />
+      <ScrollReveal><About /></ScrollReveal>
+      <ScrollReveal><Services /></ScrollReveal>
+      <ScrollReveal><Portfolio /></ScrollReveal>
+      <ScrollReveal><Testimonials /></ScrollReveal>
+      <ScrollReveal><Contact /></ScrollReveal>
+      <ScrollReveal><Footer /></ScrollReveal>
       <WhatsAppButton />
     </div>
   );
