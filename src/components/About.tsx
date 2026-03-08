@@ -1,4 +1,5 @@
 import { Palette, Video, Camera, PenTool, FileText, BookOpen } from "lucide-react";
+import { useStaggerAnimation } from "@/hooks/useScrollAnimation";
 
 const skills = [
   { icon: Palette, label: "Graphic Design" },
@@ -10,6 +11,8 @@ const skills = [
 ];
 
 const About = () => {
+  const { ref, visibleItems } = useStaggerAnimation();
+
   return (
     <section id="about" className="py-24 px-6">
       <div className="max-w-5xl mx-auto">
@@ -25,11 +28,14 @@ const About = () => {
           creativity, and a deep understanding of what makes brands unforgettable.
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {skills.map((skill) => (
+        <div ref={ref} className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {skills.map((skill, i) => (
             <div
               key={skill.label}
-              className="flex items-center gap-3 p-4 rounded-xl bg-card border border-border/50 hover:border-primary/30 transition-colors"
+              data-stagger
+              className={`flex items-center gap-3 p-4 rounded-xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-500 ${
+                visibleItems.has(i) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
             >
               <skill.icon className="h-5 w-5 text-primary flex-shrink-0" />
               <span className="font-body text-sm text-foreground">{skill.label}</span>

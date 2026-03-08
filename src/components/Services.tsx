@@ -1,4 +1,5 @@
 import { Sparkles, FileImage, Layers, Share2, Video, Camera, Building, PenTool, BookOpen } from "lucide-react";
+import { useStaggerAnimation } from "@/hooks/useScrollAnimation";
 
 const services = [
   { icon: Sparkles, title: "Logo Design", desc: "Unique, memorable logos that define your brand." },
@@ -13,6 +14,8 @@ const services = [
 ];
 
 const Services = () => {
+  const { ref, visibleItems } = useStaggerAnimation();
+
   return (
     <section id="services" className="py-24 px-6 bg-card/50">
       <div className="max-w-6xl mx-auto">
@@ -24,11 +27,14 @@ const Services = () => {
           Professional creative services for businesses and brands looking to grow through strong visual identity.
         </p>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service) => (
+        <div ref={ref} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service, i) => (
             <div
               key={service.title}
-              className="group p-6 rounded-2xl bg-background border border-border/50 hover:border-primary/40 hover:shadow-lg transition-all duration-300"
+              data-stagger
+              className={`group p-6 rounded-2xl bg-background border border-border/50 hover:border-primary/40 hover:shadow-lg transition-all duration-500 ${
+                visibleItems.has(i) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
             >
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                 <service.icon className="h-6 w-6 text-primary" />
