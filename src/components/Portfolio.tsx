@@ -4,6 +4,7 @@ import portfolioBranding from "@/assets/portfolio-branding.jpg";
 import portfolioSocial from "@/assets/portfolio-social.jpg";
 import portfolioVideo from "@/assets/portfolio-video.jpg";
 import portfolioEvent from "@/assets/portfolio-event.jpg";
+import { useStaggerAnimation } from "@/hooks/useScrollAnimation";
 
 const projects = [
   { title: "Modern Business Logo Design", category: "Logo Design", desc: "A sleek, modern logo for a growing tech brand.", image: portfolioLogo },
@@ -15,6 +16,8 @@ const projects = [
 ];
 
 const Portfolio = () => {
+  const { ref, visibleItems } = useStaggerAnimation();
+
   return (
     <section id="portfolio" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
@@ -23,11 +26,14 @@ const Portfolio = () => {
           Selected Works
         </h2>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
+        <div ref={ref} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project, i) => (
             <div
               key={project.title}
-              className="group rounded-2xl overflow-hidden bg-card border border-border/50 hover:shadow-xl transition-all duration-300"
+              data-stagger
+              className={`group rounded-2xl overflow-hidden bg-card border border-border/50 hover:shadow-xl transition-all duration-500 ${
+                visibleItems.has(i) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
             >
               <div className="relative overflow-hidden aspect-[4/3]">
                 <img

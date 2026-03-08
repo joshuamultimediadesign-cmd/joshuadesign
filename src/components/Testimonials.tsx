@@ -1,4 +1,5 @@
 import { Star, Quote } from "lucide-react";
+import { useStaggerAnimation } from "@/hooks/useScrollAnimation";
 
 const testimonials = [
   { text: "Joshua transformed our brand completely. The logo and designs he created made our business look very professional.", author: "Daniel O." },
@@ -14,6 +15,8 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
+  const { ref, visibleItems } = useStaggerAnimation();
+
   return (
     <section id="testimonials" className="py-24 px-6 bg-card/50">
       <div className="max-w-6xl mx-auto">
@@ -22,11 +25,14 @@ const Testimonials = () => {
           Client Love
         </h2>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div ref={ref} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
             <div
               key={i}
-              className="p-6 rounded-2xl bg-background border border-border/50 hover:border-primary/30 transition-colors"
+              data-stagger
+              className={`p-6 rounded-2xl bg-background border border-border/50 hover:border-primary/30 transition-all duration-500 ${
+                visibleItems.has(i) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
             >
               <Quote className="h-5 w-5 text-primary/40 mb-3" />
               <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">"{t.text}"</p>
