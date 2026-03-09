@@ -1,18 +1,18 @@
-import portfolioLogo from "@/assets/portfolio-logo.jpg";
-import portfolioFlyer from "@/assets/portfolio-flyer.jpg";
-import portfolioBranding from "@/assets/portfolio-branding.jpg";
-import portfolioSocial from "@/assets/portfolio-social.jpg";
-import portfolioVideo from "@/assets/portfolio-video.jpg";
-import portfolioEvent from "@/assets/portfolio-event.jpg";
+import portfolioLogos from "@/assets/portfolio-logos.jpg";
+import portfolioFlyers from "@/assets/portfolio-flyers.jpg";
+import portfolioSocial from "@/assets/portfolio-socialmedia.jpg";
+import portfolioBranding from "@/assets/portfolio-branding-new.jpg";
+import portfolioVideo from "@/assets/portfolio-videoedit.jpg";
+import portfolioPhoto from "@/assets/portfolio-photoediting.jpg";
 import { useStaggerAnimation } from "@/hooks/useScrollAnimation";
 
 const projects = [
-  { title: "Modern Business Logo Design", category: "Logo Design", desc: "A sleek, modern logo for a growing tech brand.", image: portfolioLogo },
-  { title: "Restaurant Promotional Flyer", category: "Flyer Design", desc: "Eye-catching flyer design for a restaurant launch event.", image: portfolioFlyer },
-  { title: "Corporate Branding Package", category: "Brand Identity", desc: "Complete brand identity with stationery and guidelines.", image: portfolioBranding },
-  { title: "Social Media Campaign Graphics", category: "Social Media Design", desc: "Cohesive social media visuals for a marketing campaign.", image: portfolioSocial },
-  { title: "Professional Video Editing Project", category: "Video Editing", desc: "Cinematic video editing with color grading and effects.", image: portfolioVideo },
-  { title: "Event Promotion Flyer", category: "Flyer Design", desc: "Bold, vibrant event flyer to maximize attendance.", image: portfolioEvent },
+  { title: "Luxury Brand Logo Collection", category: "Logo Design", desc: "A set of premium, modern logos designed for high-end brands.", image: portfolioLogos },
+  { title: "Restaurant Event Flyer Designs", category: "Flyer & Poster Design", desc: "Creative flyers for restaurant promotions and events.", image: portfolioFlyers },
+  { title: "Social Media Branding Package", category: "Social Media Graphics", desc: "Engaging social media visuals to boost brand presence online.", image: portfolioSocial },
+  { title: "Corporate Identity and Branding", category: "Brand Identity", desc: "Full branding package including logo, business cards, and stationery.", image: portfolioBranding },
+  { title: "Event Video Highlights", category: "Video Editing", desc: "Professionally edited video highlights for corporate events.", image: portfolioVideo },
+  { title: "Photo Editing Portfolio", category: "Photo Editing", desc: "Retouched and enhanced images for clients' marketing campaigns.", image: portfolioPhoto },
 ];
 
 const Portfolio = () => {
@@ -42,7 +42,12 @@ const Portfolio = () => {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors duration-300" />
+                <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/60 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <div className="text-center px-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <span className="text-xs uppercase tracking-widest text-primary-foreground/80 font-body">{project.category}</span>
+                    <h3 className="font-heading text-lg font-semibold text-primary-foreground mt-1">{project.title}</h3>
+                  </div>
+                </div>
               </div>
               <div className="p-5">
                 <span className="text-xs uppercase tracking-widest text-primary font-body">{project.category}</span>
