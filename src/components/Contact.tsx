@@ -43,7 +43,7 @@ const Contact = () => {
               </a>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 mt-2">
               <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full font-body" asChild>
                 <a href="https://wa.me/2347059120709" target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="mr-2 h-4 w-4" /> Chat on WhatsApp
