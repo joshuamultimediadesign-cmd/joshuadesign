@@ -36,6 +36,13 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
+          <button
+            onClick={() => setDark(!dark)}
+            className="p-2 rounded-md text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Toggle dark mode"
+          >
+            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
         </div>
 
         {/* Mobile toggle */}
