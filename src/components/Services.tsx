@@ -17,7 +17,7 @@ const Services = () => {
   const { ref, visibleItems } = useStaggerAnimation();
 
   return (
-    <section id="services" className="py-24 px-6 bg-card/50">
+    <section id="services" className="py-20 px-6 bg-card/50">
       <div className="max-w-6xl mx-auto">
         <p className="text-sm uppercase tracking-[0.3em] text-primary font-body mb-4 text-center">Services</p>
         <h2 className="font-heading text-4xl md:text-5xl font-semibold text-foreground mb-4 text-center">
