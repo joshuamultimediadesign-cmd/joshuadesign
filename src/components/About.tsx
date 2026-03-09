@@ -14,7 +14,7 @@ const About = () => {
   const { ref, visibleItems } = useStaggerAnimation();
 
   return (
-    <section id="about" className="py-24 px-6">
+    <section id="about" className="py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <p className="text-sm uppercase tracking-[0.3em] text-primary font-body mb-4">About</p>
         <h2 className="font-heading text-4xl md:text-5xl font-semibold text-foreground mb-8">

@@ -18,7 +18,7 @@ const Testimonials = () => {
   const { ref, visibleItems } = useStaggerAnimation();
 
   return (
-    <section id="testimonials" className="py-24 px-6 bg-card/50">
+    <section id="testimonials" className="py-20 px-6 bg-card/50">
       <div className="max-w-6xl mx-auto">
         <p className="text-sm uppercase tracking-[0.3em] text-primary font-body mb-4 text-center">Testimonials</p>
         <h2 className="font-heading text-4xl md:text-5xl font-semibold text-foreground mb-16 text-center">
