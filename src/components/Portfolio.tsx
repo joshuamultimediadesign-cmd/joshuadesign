@@ -34,7 +34,8 @@ const projects: Project[] = [
   { title: "Happy New Month – December", category: "Social Media Graphics", desc: "Creative social media post for monthly brand engagement.", image: portfolioSocialJoshua, type: "brand" },
   { title: "Luxury Brand Logo Collection", category: "Logo Design", desc: "A set of premium, modern logos designed for high-end brands.", image: portfolioLogos, type: "brand" },
   { title: "Social Media Branding Package", category: "Social Media Graphics", desc: "Engaging social media visuals to boost brand presence online.", image: portfolioSocial, type: "brand" },
-  { title: "Photo Editing Portfolio", category: "Photo Editing", desc: "Retouched and enhanced images for clients' marketing campaigns.", image: portfolioPhoto, type: "brand" },
+  { title: "Product Design Collection", category: "Product Design", desc: "Premium product packaging and mockup designs for luxury brands.", image: portfolioProduct, type: "brand" },
+  { title: "Portrait Photo Editing", category: "Photo Editing", desc: "Professional portrait retouching and color grading for human photography.", image: portfolioPortraitEditing, type: "brand" },
 
   // Client Projects
   { title: "Urban Taste BBQ & Grills Menu", category: "Flyer Design", desc: "Premium restaurant menu design for Urban Taste BBQ & Grills.", image: portfolioClientFlyer, type: "client" },
