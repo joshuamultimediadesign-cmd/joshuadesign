@@ -15,9 +15,14 @@ import portfolioClientHiring from "@/assets/portfolio-client-hiring.png";
 import portfolioClientLogo from "@/assets/portfolio-client-logo.png";
 import portfolioClientPainters from "@/assets/portfolio-client-painters.png";
 import portfolioClientCertificate from "@/assets/portfolio-client-certificate.png";
+import beforeAfter1 from "@/assets/portfolio-beforeafter-1.jpg";
+import beforeAfter2 from "@/assets/portfolio-beforeafter-2.jpg";
 import { useStaggerAnimation } from "@/hooks/useScrollAnimation";
+import PortfolioLightbox from "./PortfolioLightbox";
+import BeforeAfterSlider from "./BeforeAfterSlider";
+import { Eye } from "lucide-react";
 
-type Category = "all" | "brand" | "client";
+type Category = "all" | "brand" | "client" | "logo" | "flyer" | "social" | "video" | "photo";
 
 interface Project {
   title: string;
@@ -25,41 +30,214 @@ interface Project {
   desc: string;
   image: string;
   type: "brand" | "client";
+  filterTags: string[];
+  clientGoal?: string;
+  approach?: string;
+  tools?: string[];
 }
 
 const projects: Project[] = [
-  // Joshua Design Brand Projects
-  { title: "Joshua Design 3D Logo", category: "Brand Identity", desc: "Bold 3D typographic logo representing the Joshua Design brand.", image: portfolioLogoJoshua, type: "brand" },
-  { title: "Joshua Design Services Banner", category: "Marketing Visual", desc: "Professional services banner showcasing all Joshua Design offerings.", image: portfolioBannerJoshua, type: "brand" },
-  { title: "Happy New Month – December", category: "Social Media Graphics", desc: "Creative social media post for monthly brand engagement.", image: portfolioSocialJoshua, type: "brand" },
-  { title: "Luxury Brand Logo Collection", category: "Logo Design", desc: "A set of premium, modern logos designed for high-end brands.", image: portfolioLogos, type: "brand" },
-  { title: "Social Media Branding Package", category: "Social Media Graphics", desc: "Engaging social media visuals to boost brand presence online.", image: portfolioSocial, type: "brand" },
-  { title: "Product Design Collection", category: "Product Design", desc: "Premium product packaging and mockup designs for luxury brands.", image: portfolioProduct, type: "brand" },
-  { title: "Portrait Photo Editing", category: "Photo Editing", desc: "Professional portrait retouching and color grading for human photography.", image: portfolioPortraitEditing, type: "brand" },
-
-  // Client Projects
-  { title: "Urban Taste BBQ & Grills Menu", category: "Flyer Design", desc: "Premium restaurant menu design for Urban Taste BBQ & Grills.", image: portfolioClientFlyer, type: "client" },
-  { title: "Apst Iren Emmanuel Birthday", category: "Event Design", desc: "Stunning event poster design celebrating a special birthday.", image: portfolioClientEvent, type: "client" },
-  { title: "Harris Pizza Hiring Flyer", category: "Flyer Design", desc: "Eye-catching hiring flyer for Harris Pizza restaurant.", image: portfolioClientHiring, type: "client" },
-  { title: "Trendz By Future Logo", category: "Logo Design", desc: "Elegant fashion brand logo for Trendz By Future.", image: portfolioClientLogo, type: "client" },
-  { title: "De Royal Painters Branding", category: "Brand Identity", desc: "Complete branding design for De Royal Painters.", image: portfolioClientPainters, type: "client" },
-  { title: "TeamWork Certificate Design", category: "Certificate Design", desc: "Professional certificate of completion design.", image: portfolioClientCertificate, type: "client" },
-  { title: "Restaurant Event Flyer Designs", category: "Flyer & Poster Design", desc: "Creative flyers for restaurant promotions and events.", image: portfolioFlyers, type: "client" },
-  { title: "Corporate Identity and Branding", category: "Brand Identity", desc: "Full branding package including logo, business cards, and stationery.", image: portfolioBranding, type: "client" },
-  { title: "Event Video Highlights", category: "Video Editing", desc: "Professionally edited video highlights for corporate events.", image: portfolioVideo, type: "client" },
+  {
+    title: "Joshua Design 3D Logo",
+    category: "Brand Identity",
+    desc: "Bold 3D typographic logo representing the Joshua Design brand.",
+    image: portfolioLogoJoshua,
+    type: "brand",
+    filterTags: ["logo"],
+    approach: "Crafted a bold 3D typographic wordmark to establish a strong, memorable brand identity.",
+    tools: ["Adobe Illustrator", "Adobe Photoshop"],
+  },
+  {
+    title: "Joshua Design Services Banner",
+    category: "Marketing Visual",
+    desc: "Professional services banner showcasing all Joshua Design offerings.",
+    image: portfolioBannerJoshua,
+    type: "brand",
+    filterTags: ["social"],
+    approach: "Designed a comprehensive visual layout highlighting all creative services offered.",
+    tools: ["Adobe Photoshop"],
+  },
+  {
+    title: "Happy New Month – December",
+    category: "Social Media Graphics",
+    desc: "Creative social media post for monthly brand engagement.",
+    image: portfolioSocialJoshua,
+    type: "brand",
+    filterTags: ["social"],
+    approach: "Created festive, on-brand social media content to maintain audience engagement.",
+    tools: ["Adobe Photoshop", "Canva"],
+  },
+  {
+    title: "Luxury Brand Logo Collection",
+    category: "Logo Design",
+    desc: "A set of premium, modern logos designed for high-end brands.",
+    image: portfolioLogos,
+    type: "brand",
+    filterTags: ["logo"],
+    approach: "Developed elegant, minimal logomarks that convey luxury and professionalism.",
+    tools: ["Adobe Illustrator"],
+  },
+  {
+    title: "Social Media Branding Package",
+    category: "Social Media Graphics",
+    desc: "Engaging social media visuals to boost brand presence online.",
+    image: portfolioSocial,
+    type: "brand",
+    filterTags: ["social"],
+    approach: "Created a cohesive visual system for consistent social media branding.",
+    tools: ["Adobe Photoshop", "Canva"],
+  },
+  {
+    title: "Product Design Collection",
+    category: "Product Design",
+    desc: "Premium product packaging and mockup designs for luxury brands.",
+    image: portfolioProduct,
+    type: "brand",
+    filterTags: [],
+    approach: "Designed realistic product mockups and packaging that elevate brand perception.",
+    tools: ["Adobe Photoshop", "Adobe Illustrator"],
+  },
+  {
+    title: "Portrait Photo Editing",
+    category: "Photo Editing",
+    desc: "Professional portrait retouching and color grading for human photography.",
+    image: portfolioPortraitEditing,
+    type: "brand",
+    filterTags: ["photo"],
+    approach: "Applied professional skin retouching, color grading, and enhancement techniques.",
+    tools: ["Adobe Photoshop", "Adobe Lightroom"],
+  },
+  {
+    title: "Urban Taste BBQ & Grills Menu",
+    category: "Flyer Design",
+    desc: "Premium restaurant menu design for Urban Taste BBQ & Grills.",
+    image: portfolioClientFlyer,
+    type: "client",
+    filterTags: ["flyer"],
+    clientGoal: "Create an appetizing menu that showcases their food offerings.",
+    approach: "Used bold typography and warm color palette to evoke appetite appeal.",
+    tools: ["Adobe Photoshop", "Adobe Illustrator"],
+  },
+  {
+    title: "Apst Iren Emmanuel Birthday",
+    category: "Event Design",
+    desc: "Stunning event poster design celebrating a special birthday.",
+    image: portfolioClientEvent,
+    type: "client",
+    filterTags: ["flyer"],
+    clientGoal: "Design a memorable birthday celebration poster.",
+    approach: "Combined elegant typography with vibrant imagery for a celebratory feel.",
+    tools: ["Adobe Photoshop"],
+  },
+  {
+    title: "Harris Pizza Hiring Flyer",
+    category: "Flyer Design",
+    desc: "Eye-catching hiring flyer for Harris Pizza restaurant.",
+    image: portfolioClientHiring,
+    type: "client",
+    filterTags: ["flyer"],
+    clientGoal: "Attract new employees with an engaging hiring flyer.",
+    approach: "Used strong color contrast and clear call-to-action for maximum impact.",
+    tools: ["Adobe Photoshop"],
+  },
+  {
+    title: "Trendz By Future Logo",
+    category: "Logo Design",
+    desc: "Elegant fashion brand logo for Trendz By Future.",
+    image: portfolioClientLogo,
+    type: "client",
+    filterTags: ["logo"],
+    clientGoal: "Establish a modern, fashionable brand identity.",
+    approach: "Created a sleek, contemporary wordmark reflecting current fashion trends.",
+    tools: ["Adobe Illustrator"],
+  },
+  {
+    title: "De Royal Painters Branding",
+    category: "Brand Identity",
+    desc: "Complete branding design for De Royal Painters.",
+    image: portfolioClientPainters,
+    type: "client",
+    filterTags: ["logo"],
+    clientGoal: "Build a professional brand identity for their painting business.",
+    approach: "Developed regal branding with crown motifs and sophisticated color palette.",
+    tools: ["Adobe Illustrator", "Adobe Photoshop"],
+  },
+  {
+    title: "TeamWork Certificate Design",
+    category: "Certificate Design",
+    desc: "Professional certificate of completion design.",
+    image: portfolioClientCertificate,
+    type: "client",
+    filterTags: [],
+    clientGoal: "Create official-looking certificates for program graduates.",
+    approach: "Used formal layout with elegant borders and typography for credibility.",
+    tools: ["Adobe Illustrator"],
+  },
+  {
+    title: "Restaurant Event Flyer Designs",
+    category: "Flyer & Poster Design",
+    desc: "Creative flyers for restaurant promotions and events.",
+    image: portfolioFlyers,
+    type: "client",
+    filterTags: ["flyer"],
+    clientGoal: "Promote weekend food festival.",
+    approach: "Used bold typography and strong color contrast to attract attention.",
+    tools: ["Adobe Photoshop", "Adobe Illustrator"],
+  },
+  {
+    title: "Corporate Identity and Branding",
+    category: "Brand Identity",
+    desc: "Full branding package including logo, business cards, and stationery.",
+    image: portfolioBranding,
+    type: "client",
+    filterTags: ["logo"],
+    clientGoal: "Unify all brand materials under one cohesive identity.",
+    approach: "Developed complete brand guidelines with consistent visual language.",
+    tools: ["Adobe Illustrator", "Adobe Photoshop"],
+  },
+  {
+    title: "Event Video Highlights",
+    category: "Video Editing",
+    desc: "Professionally edited video highlights for corporate events.",
+    image: portfolioVideo,
+    type: "client",
+    filterTags: ["video"],
+    clientGoal: "Create a compelling recap video of their corporate event.",
+    approach: "Applied cinematic editing with dynamic transitions and color grading.",
+    tools: ["Adobe Premiere Pro", "CapCut"],
+  },
 ];
 
 const filters: { label: string; value: Category }[] = [
   { label: "All Work", value: "all" },
   { label: "Joshua Design", value: "brand" },
   { label: "Client Projects", value: "client" },
+  { label: "Logo Design", value: "logo" },
+  { label: "Flyer Design", value: "flyer" },
+  { label: "Social Media", value: "social" },
+  { label: "Video Editing", value: "video" },
+  { label: "Photo Editing", value: "photo" },
 ];
 
 const Portfolio = () => {
   const [active, setActive] = useState<Category>("all");
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [expandedProject, setExpandedProject] = useState<number | null>(null);
   const { ref, visibleItems } = useStaggerAnimation();
 
-  const filtered = active === "all" ? projects : projects.filter((p) => p.type === active);
+  const filtered = active === "all"
+    ? projects
+    : active === "brand" || active === "client"
+      ? projects.filter((p) => p.type === active)
+      : projects.filter((p) => p.filterTags.includes(active));
+
+  const lightboxImages = filtered.map((p) => ({ src: p.image, title: p.title, category: p.category }));
+
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
 
   return (
     <section id="portfolio" className="py-20 px-6">
@@ -81,14 +259,14 @@ const Portfolio = () => {
         )}
 
         {/* Filter Buttons */}
-        <div className="flex justify-center gap-3 mb-12">
+        <div className="flex flex-wrap justify-center gap-2 mb-12">
           {filters.map((f) => (
             <button
               key={f.value}
-              onClick={() => setActive(f.value)}
-              className={`px-5 py-2 rounded-full font-body text-sm transition-all duration-300 ${
+              onClick={() => { setActive(f.value); setExpandedProject(null); }}
+              className={`px-4 py-2 rounded-full font-body text-xs sm:text-sm transition-all duration-300 ${
                 active === f.value
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-primary text-primary-foreground shadow-md"
                   : "bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:border-foreground/30"
               }`}
             >
@@ -96,6 +274,17 @@ const Portfolio = () => {
             </button>
           ))}
         </div>
+
+        {/* Before/After Section for Photo Editing */}
+        {(active === "all" || active === "photo") && (
+          <div className="mb-12">
+            <p className="text-sm uppercase tracking-[0.3em] text-primary font-body mb-6 text-center">Before & After</p>
+            <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+              <BeforeAfterSlider before={beforeAfter1} after={beforeAfter1} title="Portrait Enhancement" />
+              <BeforeAfterSlider before={beforeAfter2} after={beforeAfter2} title="Photo Retouching" />
+            </div>
+          </div>
+        )}
 
         <div ref={ref} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((project, i) => (
@@ -106,15 +295,19 @@ const Portfolio = () => {
                 visibleItems.has(i) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
-              <div className="relative overflow-hidden aspect-[4/3]">
+              <div
+                className="relative overflow-hidden aspect-[4/3] cursor-pointer"
+                onClick={() => openLightbox(i)}
+              >
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/60 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                   <div className="text-center px-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <Eye className="w-8 h-8 text-primary-foreground mx-auto mb-2" />
                     <span className="text-xs uppercase tracking-widest text-primary-foreground/80 font-body">{project.category}</span>
                     <h3 className="font-heading text-lg font-semibold text-primary-foreground mt-1">{project.title}</h3>
                   </div>
@@ -131,11 +324,51 @@ const Portfolio = () => {
                 </div>
                 <h3 className="font-heading text-lg font-semibold text-foreground mt-1 mb-1">{project.title}</h3>
                 <p className="font-body text-sm text-muted-foreground">{project.desc}</p>
+
+                {/* Expandable case study */}
+                <button
+                  onClick={() => setExpandedProject(expandedProject === i ? null : i)}
+                  className="font-body text-xs text-primary hover:text-primary/80 mt-3 transition-colors"
+                >
+                  {expandedProject === i ? "Hide Details ↑" : "View Details →"}
+                </button>
+
+                <div className={`overflow-hidden transition-all duration-500 ${expandedProject === i ? "max-h-60 mt-3 opacity-100" : "max-h-0 opacity-0"}`}>
+                  {project.clientGoal && (
+                    <div className="mb-2">
+                      <span className="font-body text-xs font-semibold text-foreground">Client Goal:</span>
+                      <p className="font-body text-xs text-muted-foreground">{project.clientGoal}</p>
+                    </div>
+                  )}
+                  {project.approach && (
+                    <div className="mb-2">
+                      <span className="font-body text-xs font-semibold text-foreground">Design Approach:</span>
+                      <p className="font-body text-xs text-muted-foreground">{project.approach}</p>
+                    </div>
+                  )}
+                  {project.tools && (
+                    <div>
+                      <span className="font-body text-xs font-semibold text-foreground">Tools Used:</span>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {project.tools.map((tool) => (
+                          <span key={tool} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-body">{tool}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      <PortfolioLightbox
+        images={lightboxImages}
+        currentIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </section>
   );
 };
