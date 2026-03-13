@@ -15,12 +15,18 @@ import portfolioClientHiring from "@/assets/portfolio-client-hiring.png";
 import portfolioClientLogo from "@/assets/portfolio-client-logo.png";
 import portfolioClientPainters from "@/assets/portfolio-client-painters.png";
 import portfolioClientCertificate from "@/assets/portfolio-client-certificate.png";
-import beforeAfter1 from "@/assets/portfolio-beforeafter-1.jpg";
-import beforeAfter2 from "@/assets/portfolio-beforeafter-2.jpg";
+import portfolioBAPortrait from "@/assets/portfolio-ba-portrait.jpg";
+import portfolioBASkin from "@/assets/portfolio-ba-skin.jpg";
+import portfolioBACouple from "@/assets/portfolio-ba-couple.jpg";
+import portfolioResumeDesign from "@/assets/portfolio-resume-design.png";
+import portfolioTrendzLogo from "@/assets/portfolio-trendz-logo.png";
+import portfolioAqeelFlyer from "@/assets/portfolio-aqeel-flyer.png";
+import portfolioPromods from "@/assets/portfolio-promods.png";
+import portfolioTrendzBrand from "@/assets/portfolio-trendz-brand.png";
 import { useStaggerAnimation } from "@/hooks/useScrollAnimation";
 import PortfolioLightbox from "./PortfolioLightbox";
 import BeforeAfterSlider from "./BeforeAfterSlider";
-import { Eye } from "lucide-react";
+import { Eye, Play, MessageCircle } from "lucide-react";
 
 type Category = "all" | "brand" | "client" | "logo" | "flyer" | "social" | "video" | "photo";
 
@@ -37,6 +43,7 @@ interface Project {
 }
 
 const projects: Project[] = [
+  // ---- JOSHUA DESIGN BRAND ----
   {
     title: "Joshua Design 3D Logo",
     category: "Brand Identity",
@@ -66,6 +73,16 @@ const projects: Project[] = [
     filterTags: ["social"],
     approach: "Created festive, on-brand social media content to maintain audience engagement.",
     tools: ["Adobe Photoshop", "Canva"],
+  },
+  {
+    title: "Joshua Design Resume Template",
+    category: "Brand Identity",
+    desc: "Professional resume/CV template designed for the Joshua Design brand.",
+    image: portfolioResumeDesign,
+    type: "brand",
+    filterTags: [],
+    approach: "Created a clean, professional resume layout showcasing skills and experience.",
+    tools: ["Adobe Photoshop", "Adobe InDesign"],
   },
   {
     title: "Luxury Brand Logo Collection",
@@ -106,6 +123,51 @@ const projects: Project[] = [
     filterTags: ["photo"],
     approach: "Applied professional skin retouching, color grading, and enhancement techniques.",
     tools: ["Adobe Photoshop", "Adobe Lightroom"],
+  },
+  // ---- CLIENT PROJECTS ----
+  {
+    title: "Trendz By Future – Logo Design",
+    category: "Logo Design",
+    desc: "Elegant luxury fashion brand logo for Trendz By Future.",
+    image: portfolioTrendzLogo,
+    type: "client",
+    filterTags: ["logo"],
+    clientGoal: "Establish a modern, fashionable brand identity for a luxury clothing line.",
+    approach: "Created a sleek, gold-themed emblem with fashion iconography and royal crown motifs.",
+    tools: ["Adobe Illustrator", "Adobe Photoshop"],
+  },
+  {
+    title: "Trendz By Future – Brand Campaign",
+    category: "Brand Identity",
+    desc: "Full visual branding campaign for Trendz By Future fashion brand.",
+    image: portfolioTrendzBrand,
+    type: "client",
+    filterTags: ["logo", "social"],
+    clientGoal: "Create a premium brand campaign showcasing luxury fashion and lifestyle.",
+    approach: "Designed a cinematic brand visual with models, accessories, and elegant typography.",
+    tools: ["Adobe Photoshop", "Adobe Illustrator"],
+  },
+  {
+    title: "Aqeel Academy Flyer Design",
+    category: "Flyer Design",
+    desc: "Academic package flyer design for Aqeel Academy educational institution.",
+    image: portfolioAqeelFlyer,
+    type: "client",
+    filterTags: ["flyer"],
+    clientGoal: "Promote their year one academic package to new students.",
+    approach: "Used clean layout with molecular graphics and bold typography for academic appeal.",
+    tools: ["Adobe Photoshop", "Adobe InDesign"],
+  },
+  {
+    title: "Pro Mods Social Media Design",
+    category: "Social Media Graphics",
+    desc: "Eye-catching social media graphic for gaming and tech brand.",
+    image: portfolioPromods,
+    type: "client",
+    filterTags: ["social"],
+    clientGoal: "Create an attention-grabbing social media post for gaming mod promotions.",
+    approach: "Used futuristic neon aesthetics with 3D elements for maximum visual impact.",
+    tools: ["Adobe Photoshop"],
   },
   {
     title: "Urban Taste BBQ & Grills Menu",
@@ -275,13 +337,34 @@ const Portfolio = () => {
           ))}
         </div>
 
+        {/* Joshua Design Video Showreel */}
+        {(active === "all" || active === "brand" || active === "video") && (
+          <div className="mb-12">
+            <p className="text-sm uppercase tracking-[0.3em] text-primary font-body mb-6 text-center flex items-center justify-center gap-2">
+              <Play className="w-4 h-4" /> Joshua Design Video Showreel
+            </p>
+            <div className="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-border/50 bg-card">
+              <video
+                controls
+                className="w-full aspect-video"
+                poster={portfolioLogoJoshua}
+                preload="metadata"
+              >
+                <source src="/videos/joshua-showreel.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        )}
+
         {/* Before/After Section for Photo Editing */}
         {(active === "all" || active === "photo") && (
           <div className="mb-12">
             <p className="text-sm uppercase tracking-[0.3em] text-primary font-body mb-6 text-center">Before & After</p>
-            <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-              <BeforeAfterSlider before={beforeAfter1} after={beforeAfter1} title="Portrait Enhancement" />
-              <BeforeAfterSlider before={beforeAfter2} after={beforeAfter2} title="Photo Retouching" />
+            <div className="grid sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              <BeforeAfterSlider before={portfolioBAPortrait} after={portfolioBAPortrait} title="Portrait Enhancement" />
+              <BeforeAfterSlider before={portfolioBASkin} after={portfolioBASkin} title="Skin Retouching" />
+              <BeforeAfterSlider before={portfolioBACouple} after={portfolioBACouple} title="Photo Retouching" />
             </div>
           </div>
         )}
@@ -289,7 +372,7 @@ const Portfolio = () => {
         <div ref={ref} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((project, i) => (
             <div
-              key={project.title}
+              key={`${project.title}-${i}`}
               data-stagger
               className={`group rounded-2xl overflow-hidden bg-card border border-border/50 hover:shadow-xl transition-all duration-500 ${
                 visibleItems.has(i) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
@@ -333,7 +416,7 @@ const Portfolio = () => {
                   {expandedProject === i ? "Hide Details ↑" : "View Details →"}
                 </button>
 
-                <div className={`overflow-hidden transition-all duration-500 ${expandedProject === i ? "max-h-60 mt-3 opacity-100" : "max-h-0 opacity-0"}`}>
+                <div className={`overflow-hidden transition-all duration-500 ${expandedProject === i ? "max-h-80 mt-3 opacity-100" : "max-h-0 opacity-0"}`}>
                   {project.clientGoal && (
                     <div className="mb-2">
                       <span className="font-body text-xs font-semibold text-foreground">Client Goal:</span>
@@ -347,7 +430,7 @@ const Portfolio = () => {
                     </div>
                   )}
                   {project.tools && (
-                    <div>
+                    <div className="mb-3">
                       <span className="font-body text-xs font-semibold text-foreground">Tools Used:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {project.tools.map((tool) => (
@@ -356,6 +439,16 @@ const Portfolio = () => {
                       </div>
                     </div>
                   )}
+                  {/* CTA */}
+                  <a
+                    href={`https://wa.me/2347059120709?text=${encodeURIComponent(`Hello Joshua, I saw your "${project.title}" project and I would like to discuss a similar design.`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground font-body text-xs hover:bg-primary/90 transition-colors"
+                  >
+                    <MessageCircle className="w-3 h-3" />
+                    Need a design like this?
+                  </a>
                 </div>
               </div>
             </div>
