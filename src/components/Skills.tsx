@@ -1,9 +1,10 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Palette, Film, PenTool, Camera, Type, Sparkles } from "lucide-react";
+import { Palette, Film, PenTool, Camera, Type, Sparkles, Layout } from "lucide-react";
 
 const designTools = [
   { name: "Adobe Photoshop", desc: "Photo editing, flyer design, social media graphics", icon: Palette },
   { name: "Adobe Illustrator", desc: "Logo design, brand identity, vector artwork", icon: PenTool },
+  { name: "Adobe InDesign", desc: "Layout design, brochures, print media", icon: Layout },
   { name: "Canva", desc: "Quick social media designs and marketing materials", icon: Sparkles },
 ];
 
@@ -46,14 +47,13 @@ const Skills = () => {
           What I Work With
         </h2>
 
-        {/* Design & Video Tools - 2 column on mobile, 3 on desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
           {/* Design Tools */}
-          <div className="sm:col-span-2 lg:col-span-2">
+          <div className="lg:col-span-2">
             <h3 className="font-heading text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <Palette className="h-5 w-5 text-primary" /> Design Tools
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {designTools.map((tool) => (
                 <ToolCard key={tool.name} tool={tool} />
               ))}
