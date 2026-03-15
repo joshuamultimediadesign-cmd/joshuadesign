@@ -12,6 +12,7 @@ import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CreativeProcess from "@/components/CreativeProcess";
 import ScrollReveal from "@/components/ScrollReveal";
 
 const Index = () => {
@@ -22,6 +23,7 @@ const Index = () => {
       <ScrollReveal><About /></ScrollReveal>
       <ScrollReveal><Services /></ScrollReveal>
       <ScrollReveal><Skills /></ScrollReveal>
+      <ScrollReveal><CreativeProcess /></ScrollReveal>
       <ScrollReveal><DesignShowcase /></ScrollReveal>
       <ScrollReveal><FeaturedProjects /></ScrollReveal>
       <ScrollReveal><Portfolio /></ScrollReveal>
