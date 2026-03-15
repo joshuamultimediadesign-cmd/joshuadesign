@@ -1,0 +1,7 @@
+/* Hide Lovable branding */
+img[src*="lovable"],
+a[href*="lovable"],
+.lovable-badge,
+[class*="lovable"]{
+  display: none !important;
+}
