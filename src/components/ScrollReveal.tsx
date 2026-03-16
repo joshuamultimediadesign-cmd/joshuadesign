@@ -2,7 +2,7 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { ReactNode } from "react";
 
 const ScrollReveal = ({ children, className = "" }: { children: ReactNode; className?: string }) => {
-  const { ref, isVisible } = useScrollAnimation(0.1);
+  const { ref, isVisible } = useScrollAnimation(0.01);
 
   return (
     <div

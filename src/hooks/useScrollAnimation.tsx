@@ -1,10 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 
-export const useScrollAnimation = (threshold = 0.15) => {
+export const useScrollAnimation = (threshold = 0.05) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    // Fallback: if element is already in viewport on mount, show immediately
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -12,16 +22,16 @@ export const useScrollAnimation = (threshold = 0.15) => {
           observer.unobserve(entry.target);
         }
       },
-      { threshold }
+      { threshold, rootMargin: "50px 0px" }
     );
-    if (ref.current) observer.observe(ref.current);
+    observer.observe(el);
     return () => observer.disconnect();
   }, [threshold]);
 
   return { ref, isVisible };
 };
 
-export const useStaggerAnimation = (threshold = 0.1) => {
+export const useStaggerAnimation = (threshold = 0.01) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
 
@@ -29,19 +39,30 @@ export const useStaggerAnimation = (threshold = 0.1) => {
     const container = ref.current;
     if (!container) return;
 
+    const triggerStagger = () => {
+      const children = container.querySelectorAll("[data-stagger]");
+      children.forEach((_, i) => {
+        setTimeout(() => {
+          setVisibleItems((prev) => new Set(prev).add(i));
+        }, i * 100);
+      });
+    };
+
+    // Check if already visible on mount
+    const rect = container.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      triggerStagger();
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          const children = container.querySelectorAll("[data-stagger]");
-          children.forEach((_, i) => {
-            setTimeout(() => {
-              setVisibleItems((prev) => new Set(prev).add(i));
-            }, i * 100);
-          });
+          triggerStagger();
           observer.unobserve(entry.target);
         }
       },
-      { threshold }
+      { threshold, rootMargin: "100px 0px" }
     );
     observer.observe(container);
     return () => observer.disconnect();
