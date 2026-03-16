@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Download } from "lucide-react";
 
 interface LightboxProps {
   images: { src: string; title: string; category: string }[];
@@ -15,6 +15,7 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [entering, setEntering] = useState(false);
+  const [swipeStart, setSwipeStart] = useState<number | null>(null);
 
   useEffect(() => {
     setIndex(currentIndex);
@@ -69,17 +70,34 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
     setPosition({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
   };
 
+  // Mobile swipe support (when not zoomed)
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (zoom <= 1) return;
-    const touch = e.touches[0];
-    setIsDragging(true);
-    setDragStart({ x: touch.clientX - position.x, y: touch.clientY - position.y });
+    if (zoom > 1) {
+      const touch = e.touches[0];
+      setIsDragging(true);
+      setDragStart({ x: touch.clientX - position.x, y: touch.clientY - position.y });
+    } else {
+      setSwipeStart(e.touches[0].clientX);
+    }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
-    const touch = e.touches[0];
-    setPosition({ x: touch.clientX - dragStart.x, y: touch.clientY - dragStart.y });
+    if (isDragging && zoom > 1) {
+      const touch = e.touches[0];
+      setPosition({ x: touch.clientX - dragStart.x, y: touch.clientY - dragStart.y });
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    setIsDragging(false);
+    if (swipeStart !== null && zoom <= 1) {
+      const endX = e.changedTouches[0].clientX;
+      const diff = swipeStart - endX;
+      if (Math.abs(diff) > 50) {
+        navigate(diff > 0 ? 1 : -1);
+      }
+      setSwipeStart(null);
+    }
   };
 
   if (!isOpen) return null;
@@ -88,63 +106,80 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-300 ${entering ? "bg-black/90 opacity-100" : "bg-black/0 opacity-0"}`}
+      className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-300 ${entering ? "bg-black/95 opacity-100" : "bg-black/0 opacity-0"}`}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      {/* Controls */}
-      <div className="absolute top-4 right-4 flex gap-2 z-10">
-        <button onClick={() => handleZoom(1)} className="p-2 rounded-full bg-card/20 backdrop-blur-sm text-primary-foreground hover:bg-card/40 transition-colors">
+      {/* Top controls */}
+      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex gap-2 z-10">
+        <button onClick={() => handleZoom(1)} className="p-2.5 sm:p-2 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors" aria-label="Zoom in">
           <ZoomIn className="w-5 h-5" />
         </button>
-        <button onClick={() => handleZoom(-1)} className="p-2 rounded-full bg-card/20 backdrop-blur-sm text-primary-foreground hover:bg-card/40 transition-colors">
+        <button onClick={() => handleZoom(-1)} className="p-2.5 sm:p-2 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors" aria-label="Zoom out">
           <ZoomOut className="w-5 h-5" />
         </button>
-        <button onClick={onClose} className="p-2 rounded-full bg-card/20 backdrop-blur-sm text-primary-foreground hover:bg-card/40 transition-colors">
+        <button onClick={onClose} className="p-2.5 sm:p-2 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors" aria-label="Close">
           <X className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Navigation */}
+      {/* Counter top-left */}
+      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
+        <span className="text-sm text-white/70 font-body bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full">
+          {index + 1} / {images.length}
+        </span>
+      </div>
+
+      {/* Desktop nav arrows (hidden on mobile - swipe instead) */}
       <button
         onClick={() => navigate(-1)}
-        className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-card/20 backdrop-blur-sm text-primary-foreground hover:bg-card/40 transition-colors z-10"
+        className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors z-10"
+        aria-label="Previous"
       >
         <ChevronLeft className="w-6 h-6" />
       </button>
       <button
         onClick={() => navigate(1)}
-        className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-card/20 backdrop-blur-sm text-primary-foreground hover:bg-card/40 transition-colors z-10"
+        className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors z-10"
+        aria-label="Next"
       >
         <ChevronRight className="w-6 h-6" />
       </button>
 
       {/* Image */}
       <div
-        className={`max-w-[90vw] max-h-[85vh] overflow-hidden transition-transform duration-300 ${entering ? "scale-100" : "scale-90"}`}
+        className={`w-full h-full flex items-center justify-center p-4 sm:p-12 transition-transform duration-300 ${entering ? "scale-100" : "scale-95"}`}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={() => setIsDragging(false)}
         onMouseLeave={() => setIsDragging(false)}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
-        onTouchEnd={() => setIsDragging(false)}
+        onTouchEnd={handleTouchEnd}
         style={{ cursor: zoom > 1 ? (isDragging ? "grabbing" : "grab") : "default" }}
       >
         <img
           src={current.src}
           alt={current.title}
-          className="max-w-full max-h-[85vh] object-contain transition-transform duration-200 select-none"
+          className="max-w-full max-h-[80vh] sm:max-h-[85vh] object-contain transition-transform duration-200 select-none rounded-lg"
           style={{ transform: `scale(${zoom}) translate(${position.x / zoom}px, ${position.y / zoom}px)` }}
           draggable={false}
         />
       </div>
 
-      {/* Info bar */}
-      <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 transition-all duration-300 ${entering ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
+      {/* Bottom info bar */}
+      <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6 transition-all duration-300 ${entering ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-xs uppercase tracking-widest text-primary font-body">{current.category}</span>
-          <h3 className="font-heading text-xl text-white mt-1">{current.title}</h3>
-          <p className="text-sm text-white/60 mt-1">{index + 1} / {images.length}</p>
+          <h3 className="font-heading text-lg sm:text-xl text-white mt-1">{current.title}</h3>
+          {/* Mobile nav arrows */}
+          <div className="flex sm:hidden justify-center gap-6 mt-3">
+            <button onClick={() => navigate(-1)} className="p-2 rounded-full bg-white/10 text-white" aria-label="Previous">
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button onClick={() => navigate(1)} className="p-2 rounded-full bg-white/10 text-white" aria-label="Next">
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

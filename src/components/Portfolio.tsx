@@ -378,9 +378,10 @@ const Portfolio = () => {
                 visibleItems.has(i) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
-              <div
-                className="relative overflow-hidden aspect-[4/3] cursor-pointer"
+              <button
+                className="relative overflow-hidden aspect-[4/3] cursor-pointer w-full block text-left focus:outline-none focus:ring-2 focus:ring-primary rounded-t-2xl"
                 onClick={() => openLightbox(i)}
+                aria-label={`View ${project.title}`}
               >
                 <img
                   src={project.image}
@@ -388,14 +389,17 @@ const Portfolio = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/60 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                  <div className="text-center px-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <Eye className="w-8 h-8 text-primary-foreground mx-auto mb-2" />
-                    <span className="text-xs uppercase tracking-widest text-primary-foreground/80 font-body">{project.category}</span>
-                    <h3 className="font-heading text-lg font-semibold text-primary-foreground mt-1">{project.title}</h3>
+                <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/60 sm:transition-colors sm:duration-300 flex items-center justify-center sm:opacity-0 sm:group-hover:opacity-100">
+                  <div className="text-center px-4 sm:translate-y-4 sm:group-hover:translate-y-0 transition-transform duration-300">
+                    <Eye className="w-8 h-8 text-primary-foreground mx-auto mb-2 drop-shadow-lg" />
+                    <span className="text-xs uppercase tracking-widest text-primary-foreground/80 font-body drop-shadow">View Full Image</span>
                   </div>
                 </div>
-              </div>
+                {/* Mobile tap indicator */}
+                <div className="absolute bottom-2 right-2 sm:hidden p-1.5 rounded-full bg-primary/80 text-primary-foreground shadow-lg">
+                  <Eye className="w-4 h-4" />
+                </div>
+              </button>
               <div className="p-5">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs uppercase tracking-widest text-primary font-body">{project.category}</span>
