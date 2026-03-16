@@ -31,7 +31,7 @@ export const useScrollAnimation = (threshold = 0.05) => {
   return { ref, isVisible };
 };
 
-export const useStaggerAnimation = (threshold = 0.1) => {
+export const useStaggerAnimation = (threshold = 0.01) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
 
@@ -39,19 +39,30 @@ export const useStaggerAnimation = (threshold = 0.1) => {
     const container = ref.current;
     if (!container) return;
 
+    const triggerStagger = () => {
+      const children = container.querySelectorAll("[data-stagger]");
+      children.forEach((_, i) => {
+        setTimeout(() => {
+          setVisibleItems((prev) => new Set(prev).add(i));
+        }, i * 100);
+      });
+    };
+
+    // Check if already visible on mount
+    const rect = container.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      triggerStagger();
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          const children = container.querySelectorAll("[data-stagger]");
-          children.forEach((_, i) => {
-            setTimeout(() => {
-              setVisibleItems((prev) => new Set(prev).add(i));
-            }, i * 100);
-          });
+          triggerStagger();
           observer.unobserve(entry.target);
         }
       },
-      { threshold }
+      { threshold, rootMargin: "100px 0px" }
     );
     observer.observe(container);
     return () => observer.disconnect();
