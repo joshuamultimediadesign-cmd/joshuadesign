@@ -106,48 +106,30 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-300 ${entering ? "bg-black/95 opacity-100" : "bg-black/0 opacity-0"}`}
+      className={`fixed inset-0 z-[100] flex flex-col transition-all duration-300 ${entering ? "bg-black/95 opacity-100" : "bg-black/0 opacity-0"}`}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       {/* Top controls */}
-      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex gap-2 z-10">
-        <button onClick={() => handleZoom(1)} className="p-2.5 sm:p-2 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors" aria-label="Zoom in">
-          <ZoomIn className="w-5 h-5" />
-        </button>
-        <button onClick={() => handleZoom(-1)} className="p-2.5 sm:p-2 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors" aria-label="Zoom out">
-          <ZoomOut className="w-5 h-5" />
-        </button>
-        <button onClick={onClose} className="p-2.5 sm:p-2 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors" aria-label="Close">
-          <X className="w-5 h-5" />
-        </button>
-      </div>
-
-      {/* Counter top-left */}
-      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
+      <div className="flex-shrink-0 flex items-center justify-between p-3 sm:p-4 z-10">
         <span className="text-sm text-white/70 font-body bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full">
           {index + 1} / {images.length}
         </span>
+        <div className="flex gap-2">
+          <button onClick={() => handleZoom(1)} className="p-2.5 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors" aria-label="Zoom in">
+            <ZoomIn className="w-5 h-5" />
+          </button>
+          <button onClick={() => handleZoom(-1)} className="p-2.5 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors" aria-label="Zoom out">
+            <ZoomOut className="w-5 h-5" />
+          </button>
+          <button onClick={onClose} className="p-2.5 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors" aria-label="Close">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
-      {/* Desktop nav arrows (hidden on mobile - swipe instead) */}
-      <button
-        onClick={() => navigate(-1)}
-        className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors z-10"
-        aria-label="Previous"
-      >
-        <ChevronLeft className="w-6 h-6" />
-      </button>
-      <button
-        onClick={() => navigate(1)}
-        className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors z-10"
-        aria-label="Next"
-      >
-        <ChevronRight className="w-6 h-6" />
-      </button>
-
-      {/* Image */}
+      {/* Image area - takes remaining space */}
       <div
-        className={`w-full h-full flex items-center justify-center p-4 sm:p-12 transition-transform duration-300 ${entering ? "scale-100" : "scale-95"}`}
+        className="flex-1 min-h-0 flex items-center justify-center px-3 sm:px-12 relative"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={() => setIsDragging(false)}
@@ -155,31 +137,46 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         style={{ cursor: zoom > 1 ? (isDragging ? "grabbing" : "grab") : "default" }}
       >
+        {/* Desktop nav arrows */}
+        <button
+          onClick={() => navigate(-1)}
+          className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors z-10"
+          aria-label="Previous"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button
+          onClick={() => navigate(1)}
+          className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors z-10"
+          aria-label="Next"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+
         <img
           src={current.src}
           alt={current.title}
-          className="max-w-full max-h-[80vh] sm:max-h-[85vh] object-contain transition-transform duration-200 select-none rounded-lg"
+          className={`max-w-full max-h-full object-contain select-none rounded-lg transition-transform duration-200 ${entering ? "scale-100" : "scale-90"}`}
           style={{ transform: `scale(${zoom}) translate(${position.x / zoom}px, ${position.y / zoom}px)` }}
           draggable={false}
         />
       </div>
 
-      {/* Bottom info bar */}
-      <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6 transition-all duration-300 ${entering ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
-        <div className="max-w-4xl mx-auto text-center">
-          <span className="text-xs uppercase tracking-widest text-primary font-body">{current.category}</span>
-          <h3 className="font-heading text-lg sm:text-xl text-white mt-1">{current.title}</h3>
-          {/* Mobile nav arrows */}
-          <div className="flex sm:hidden justify-center gap-6 mt-3">
-            <button onClick={() => navigate(-1)} className="p-2 rounded-full bg-white/10 text-white" aria-label="Previous">
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button onClick={() => navigate(1)} className="p-2 rounded-full bg-white/10 text-white" aria-label="Next">
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
+      {/* Bottom info bar - fixed height, never overlaps image */}
+      <div className={`flex-shrink-0 p-3 sm:p-4 text-center transition-all duration-300 ${entering ? "opacity-100" : "opacity-0"}`}>
+        <span className="text-xs uppercase tracking-widest text-primary font-body">{current.category}</span>
+        <h3 className="font-heading text-base sm:text-lg text-white mt-0.5">{current.title}</h3>
+        {/* Mobile nav arrows */}
+        <div className="flex sm:hidden justify-center gap-6 mt-2">
+          <button onClick={() => navigate(-1)} className="p-2.5 rounded-full bg-white/10 text-white" aria-label="Previous">
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button onClick={() => navigate(1)} className="p-2.5 rounded-full bg-white/10 text-white" aria-label="Next">
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </div>
