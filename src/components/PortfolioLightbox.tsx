@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Download } from "lucide-react";
 
 interface LightboxProps {
@@ -70,7 +71,6 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
     setPosition({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
   };
 
-  // Mobile swipe support (when not zoomed)
   const handleTouchStart = (e: React.TouchEvent) => {
     if (zoom > 1) {
       const touch = e.touches[0];
@@ -104,12 +104,11 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
 
   const current = images[index];
 
-  return (
+  return createPortal(
     <div
       className={`fixed inset-0 z-[100] flex flex-col transition-all duration-300 ${entering ? "bg-black/95 opacity-100" : "bg-black/0 opacity-0"}`}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      {/* Top controls */}
       <div className="flex-shrink-0 flex items-center justify-between p-3 sm:p-4 z-10">
         <span className="text-sm text-white/70 font-body bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full">
           {index + 1} / {images.length}
@@ -127,7 +126,6 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
         </div>
       </div>
 
-      {/* Image area - takes remaining space */}
       <div
         className="flex-1 min-h-0 flex items-center justify-center px-3 sm:px-12 relative"
         onMouseDown={handleMouseDown}
@@ -140,7 +138,6 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
         onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         style={{ cursor: zoom > 1 ? (isDragging ? "grabbing" : "grab") : "default" }}
       >
-        {/* Desktop nav arrows */}
         <button
           onClick={() => navigate(-1)}
           className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors z-10"
@@ -165,11 +162,9 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
         />
       </div>
 
-      {/* Bottom info bar - fixed height, never overlaps image */}
       <div className={`flex-shrink-0 p-3 sm:p-4 text-center transition-all duration-300 ${entering ? "opacity-100" : "opacity-0"}`}>
         <span className="text-xs uppercase tracking-widest text-primary font-body">{current.category}</span>
         <h3 className="font-heading text-base sm:text-lg text-white mt-0.5">{current.title}</h3>
-        {/* Mobile nav arrows */}
         <div className="flex sm:hidden justify-center gap-6 mt-2">
           <button onClick={() => navigate(-1)} className="p-2.5 rounded-full bg-white/10 text-white" aria-label="Previous">
             <ChevronLeft className="w-5 h-5" />
@@ -179,7 +174,8 @@ const PortfolioLightbox = ({ images, currentIndex, isOpen, onClose }: LightboxPr
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
